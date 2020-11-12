@@ -8,22 +8,23 @@ HOST = ''
 PORT = 50000
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind((HOST, PORT))
-s.listen()
-print('Aguardando conexão')
-conn, ender = s.accept()
+s.bind((socket.gethostname(), PORT))
+s.listen(1)
 
-print('conectado em', ender)
+print('Aguardando conexão')
+(conn, ender) = s.accept()
+
+print(f'conectado em {ender}')
 while True:
     data = conn.recv(1024)
     msg = data.decode("utf-8")
-    print(msg)
     
     if "fechar" == msg:
         print('Fechando a conexão')
+        conn.sendall(bytes('',"utf-8"))
         break
-
-    if data:
+    else:
+        print(msg)
         data = input()
         conn.sendall(bytes(data,"utf-8"))
 
