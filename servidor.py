@@ -1,5 +1,9 @@
 import socket
 
+# gera o socket
+# AF_INET == ipv4
+# SOCK_STREAM == TCP
+
 HOST = ''
 PORT = 50000
 
@@ -12,8 +16,15 @@ conn, ender = s.accept()
 print('conectado em', ender)
 while True:
     data = conn.recv(1024)
-    if not data:
+    msg = data.decode("utf-8")
+    print(msg)
+    
+    if "fechar" == msg:
         print('Fechando a conexão')
-        conn.close()
         break
-    conn.sendall(data)
+
+    if data:
+        data = input()
+        conn.sendall(bytes(data,"utf-8"))
+
+conn.close()
